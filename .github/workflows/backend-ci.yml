@@ -28,12 +28,16 @@ jobs:
       packages: write
     env:
       RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+      GHCR_CLEANUP_TOKEN: ${{ secrets.GHCR_CLEANUP_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Compute image name
         id: image
-        run: echo "name=ghcr.io/$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
+        run: |
+          REPO_LOWER=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')
+          echo "name=ghcr.io/$REPO_LOWER" >> "$GITHUB_OUTPUT"
+          echo "package=$(basename "$REPO_LOWER")" >> "$GITHUB_OUTPUT"
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
@@ -62,3 +66,21 @@ jobs:
         if: ${{ env.RENDER_DEPLOY_HOOK_URL == '' }}
         run: |
           echo "::notice title=Render deploy skipped::RENDER_DEPLOY_HOOK_URL secret is not set, so the Render deploy was skipped. Add it under Settings > Secrets and variables > Actions (value = your Render service's Deploy Hook URL) to enable auto-deploy."
+
+      # Optional: set a repo secret named GHCR_CLEANUP_TOKEN to a Personal
+      # Access Token (classic) with the read:packages and delete:packages
+      # scopes. GITHUB_TOKEN cannot delete package versions even with
+      # packages: write, so this step is skipped without it.
+      - name: Delete old container image versions
+        if: ${{ env.GHCR_CLEANUP_TOKEN != '' }}
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: ${{ steps.image.outputs.package }}
+          package-type: container
+          min-versions-to-keep: 1
+          token: ${{ secrets.GHCR_CLEANUP_TOKEN }}
+
+      - name: Remind to configure GHCR cleanup token
+        if: ${{ env.GHCR_CLEANUP_TOKEN == '' }}
+        run: |
+          echo "::notice title=Image cleanup skipped::GHCR_CLEANUP_TOKEN secret is not set, so old container image versions were kept. Add it under Settings > Secrets and variables > Actions (value = a classic PAT with read:packages and delete:packages scopes) to keep only the latest image."
