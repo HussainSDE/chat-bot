@@ -2,13 +2,11 @@ package com.chat.chat_bot_app.controller;
 
 import com.chat.chat_bot_app.dto.ChatRequest;
 import com.chat.chat_bot_app.dto.ChatResponse;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/chat")
+@CrossOrigin
 public class ChatController {
 
 	@PostMapping
