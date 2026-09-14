@@ -26,6 +26,8 @@ jobs:
     permissions:
       contents: read
       packages: write
+    env:
+      RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
     steps:
       - uses: actions/checkout@v4
 
@@ -51,12 +53,12 @@ jobs:
 
       # Optional: set a repo secret named RENDER_DEPLOY_HOOK_URL (from your
       # Render service's Settings > Deploy Hook) to auto-deploy on every push
-      # to main branch test.
+      # to main.
       - name: Trigger Render deploy
-        if: ${{ secrets.RENDER_DEPLOY_HOOK_URL != '' }}
-        run: curl -fsS -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+        if: ${{ env.RENDER_DEPLOY_HOOK_URL != '' }}
+        run: curl -fsS -X POST "$RENDER_DEPLOY_HOOK_URL"
 
       - name: Remind to configure Render deploy hook
-        if: ${{ secrets.RENDER_DEPLOY_HOOK_URL == '' }}
+        if: ${{ env.RENDER_DEPLOY_HOOK_URL == '' }}
         run: |
           echo "::notice title=Render deploy skipped::RENDER_DEPLOY_HOOK_URL secret is not set, so the Render deploy was skipped. Add it under Settings > Secrets and variables > Actions (value = your Render service's Deploy Hook URL) to enable auto-deploy."
