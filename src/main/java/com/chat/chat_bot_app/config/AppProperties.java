@@ -2,6 +2,8 @@ package com.chat.chat_bot_app.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.List;
+
 @ConfigurationProperties(prefix = "app")
 public class AppProperties {
 
@@ -64,13 +66,13 @@ public class AppProperties {
 	}
 
 	public static class Cors {
-		private String allowedOrigins;
+		private List<String> allowedOrigins;
 
-		public String getAllowedOrigins() {
+		public List<String> getAllowedOrigins() {
 			return allowedOrigins;
 		}
 
-		public void setAllowedOrigins(String allowedOrigins) {
+		public void setAllowedOrigins(List<String> allowedOrigins) {
 			this.allowedOrigins = allowedOrigins;
 		}
 	}
