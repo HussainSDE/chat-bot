@@ -10,6 +10,7 @@ app:
     allowed-origins:
       - http://localhost:4200
       - https://chat.kmkspring.com
+      - http://chat.kmkspring.com
 
   auth:
     # Hardcoded login credentials for first-level testing (no DB).
