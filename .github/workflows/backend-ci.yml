@@ -51,7 +51,7 @@ jobs:
 
       # Optional: set a repo secret named RENDER_DEPLOY_HOOK_URL (from your
       # Render service's Settings > Deploy Hook) to auto-deploy on every push
-      # to main branch.
+      # to main branch test.
       - name: Trigger Render deploy
         if: ${{ secrets.RENDER_DEPLOY_HOOK_URL != '' }}
         run: curl -fsS -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
