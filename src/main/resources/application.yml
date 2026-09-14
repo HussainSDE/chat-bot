@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: chat-bot-app
+
+server:
+  port: 8080
+
+app:
+  cors:
+    allowed-origins: http://localhost:4200
+
+  auth:
+    # Hardcoded login credentials for first-level testing (no DB).
+    username: admin
+    password: admin123
+
+  jwt:
+    # Demo-only secret. Replace with a securely generated value before any real use.
+    secret: c2hoaGhoLXRoaXMtaXMtYS1kZW1vLXNlY3JldC1rZXktZm9yLWp3dC1zaWduaW5nLTEyMzQ1Ng==
+    expiration-ms: 3600000
