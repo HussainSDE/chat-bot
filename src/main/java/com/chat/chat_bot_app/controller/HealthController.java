@@ -17,7 +17,7 @@ public class HealthController {
         System.out.println("Health End point call : "+ Instant.now());
     }
     @GetMapping("/test")
-    public String healthCheck(){
+    public String healthCheckTest(){
         System.out.println("Health End point test call : "+ Instant.now());
         return "Server is up. Response from server : "+Instant.now();
     }
